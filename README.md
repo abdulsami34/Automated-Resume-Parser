@@ -18,7 +18,7 @@ Resume Parser is a web application that allows users to upload a resume in PDF f
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/resume-parser.git
+    git clone https://github.com/abdulsami34/resume-parser.git
     cd resume-parser
     ```
 
