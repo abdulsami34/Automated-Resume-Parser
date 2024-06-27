@@ -3,4 +3,4 @@ PyPDF2
 pdfminer
 pdfminer.six
 python-docx
-
+spacy
