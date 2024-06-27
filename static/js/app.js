@@ -23,7 +23,7 @@ document.getElementById('resumeForm').addEventListener('submit', async function(
             document.getElementById('email').textContent = data.email || 'N/A';
             document.getElementById('skills').textContent = data.skills.length ? data.skills.join(', ') : 'N/A';
             document.getElementById('education').textContent = data.education.length ? data.education.join(', ') : 'N/A';
-            document.getElementById('experience').textContent = data.experience || 'N/A'; 
+            document.getElementById('experience').textContent = data.experience || 'N/A';
         } else {
             alert('Error parsing resume.');
         }
@@ -31,4 +31,12 @@ document.getElementById('resumeForm').addEventListener('submit', async function(
         console.error('Error:', error);
         alert('Error parsing resume.');
     }
+});
+
+document.getElementById('lightModeBtn').addEventListener('click', function() {
+    document.getElementById('theme-style').setAttribute('href', 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css');
+});
+
+document.getElementById('darkModeBtn').addEventListener('click', function() {
+    document.getElementById('theme-style').setAttribute('href', 'https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/darkly/bootstrap.min.css');
 });
