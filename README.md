@@ -18,8 +18,8 @@ Resume Parser is a web application that allows users to upload a resume in PDF f
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/abdulsami34/resume-parser.git
-    cd resume-parser
+    git clone https://github.com/abdulsami34/Automated-Resume-Parser
+    cd Automated-Resume-Parser
     ```
 
 2. Set up a virtual environment and activate it:
@@ -35,7 +35,7 @@ Resume Parser is a web application that allows users to upload a resume in PDF f
 
 4. Run the Flask application:
     ```sh
-    flask run
+    flask run or python app.py
     ```
 
 5. Open your browser and go to `http://127.0.0.1:5000` to view the application.
