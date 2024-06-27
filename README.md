@@ -6,6 +6,7 @@ Resume Parser is a web application that allows users to upload a resume in PDF f
 - Upload a resume in PDF format
 - Extracts key information from the resume
 - Displays extracted information in a user-friendly format
+- Light Mode / Dark Mode
 
 ## Requirements
 
