@@ -2,10 +2,29 @@ import os
 import re
 from flask import Flask, request, jsonify, render_template
 from pdfminer.high_level import extract_text
+from docx import Document
 import spacy
 from spacy.matcher import Matcher
 
 app = Flask(__name__)
+
+def extract_text_from_pdf(pdf_file):
+    return extract_text(pdf_file)
+
+def extract_text_from_docx(docx_file):
+    doc = Document(docx_file)
+    full_text = []
+    for para in doc.paragraphs:
+        full_text.append(para.text)
+    return '\n'.join(full_text)
+
+def extract_text_from_file(file_path):
+    if file_path.endswith('.pdf'):
+        return extract_text_from_pdf(file_path)
+    elif file_path.endswith('.docx'):
+        return extract_text_from_docx(file_path)
+    else:
+        raise ValueError("Unsupported file format")
 
 def extract_name(resume_text):
     nlp = spacy.load('en_core_web_sm')
@@ -52,7 +71,7 @@ def extract_skills_from_resume(text, skills_list):
 
 def extract_education_from_resume(text):
     pattern = r"(?i)\b(?:B\.?S\.?|BSC|B\.?A\.?|B\.?TECH|B\.?COM|M\.?S\.?|MSC|M\.?A\.?|M\.?TECH|M\.?COM|PH\.?D|BACHELORS(?:'S)?|MASTERS(?:'S)?|INTERMEDIATE|SCHOOL|DIPLOMA|CERTIFICATE|DEGREE|ASSOCIATE)\b.*?(?:\([A-Za-z]+\))?.*?(?:(?:,|\bat\b)?\s*(?:[A-Z][a-z]+\s?)+,?\s*\d{4})?"
-    matches = re.findall(pattern, text, re.IGNORECASE)
+    matches = re.findall(pattern, text)
     return [match.strip() for match in matches]
 
 def extract_experience_from_text(text):
@@ -74,26 +93,26 @@ def parse_resume():
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
 
-    if file and file.filename.endswith('.pdf'):
+    if file:
         file_path = os.path.join('/tmp', file.filename)
         file.save(file_path)
 
-        text = extract_text(file_path)
+        text = extract_text_from_file(file_path)
         os.remove(file_path)
 
         name = extract_name(text)
         contact_number = extract_contact_number_from_resume(text)
         email = extract_email_from_resume(text)
-        
+
         skills_list = [
             'Python', 'Data Analysis', 'Machine Learning', 'Deep Learning', 'NLP', 'Computer Vision',
-            'Java', 'C++', 'C#', 'SQL', 'NoSQL', 'HTML', 'CSS', 'JavaScript', 'React', 'Angular', 
+            'Java', 'C++', 'C#', 'SQL', 'NoSQL', 'HTML', 'CSS', 'JavaScript', 'React', 'Angular',
             'Node.js', 'Django', 'Flask', 'Spring', 'Ruby on Rails', 'Git', 'Docker', 'Kubernetes',
-            'AWS', 'Azure', 'GCP', 'TensorFlow', 'Keras', 'PyTorch', 'OpenCV', 'scikit-learn', 
+            'AWS', 'Azure', 'GCP', 'TensorFlow', 'Keras', 'PyTorch', 'OpenCV', 'scikit-learn',
             'Pandas', 'NumPy', 'Matplotlib', 'Seaborn', 'Tableau', 'PowerBI', 'Spark', 'Hadoop',
             'Project Management', 'Agile', 'Scrum', 'Communication', 'Leadership', 'Problem Solving'
         ]
-        
+
         skills = extract_skills_from_resume(text, skills_list)
         education = extract_education_from_resume(text)
         experience = extract_experience_from_text(text)
@@ -111,4 +130,3 @@ def parse_resume():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
-
